@@ -22,8 +22,8 @@ class Modtest
   def print_options options_hash
     puts "Selected Options: "
     options_hash.each do |option,value|
-      $stdout.print "#{option}=".color(:cyan)
-      $stdout.puts "#{value}"
+      print "#{option}=".color(:cyan)
+      puts "#{value}"
     end
   end
 
@@ -55,9 +55,9 @@ class Modtest
         options.default \
         :key => "#{ENV['HOME']}/.ssh/id_rsa-acceptance",
         :destroy => ENV['BEAKER_destroy'] || false,
-        :provision => ENV['BEAKER_provision'] || true
+        :provision => ENV['BEAKER_provision'] || false
 
-        final_command_hash = {
+        @final_command_hash = {
           "PUPPET_INSTALL_TYPE" => puppet_install_type,
           "BEAKER_PE_DIR" => pe_dir,
           "BEAKER_PE_VER" => pe_version_actual,
@@ -68,7 +68,7 @@ class Modtest
         }
 
         @final_command_hash.each do |key,value|
-          unless v == nil
+          unless value == nil
             @final_command_string += "#{key}=#{value} "
           end
         end
@@ -79,7 +79,7 @@ class Modtest
           raise "Acceptance test directory: #{Dir.pwd}/spec/acceptance not found, are you in the module's root dir?"
         end
 
-        @final_command_string += "bundle exec rspec #{Dir.pwd}/spec/acceptance"
+        @final_command_string += "bundle exec rspec #{Dir.pwd}/spec/acceptance/#{options.test}"
 
         print_options @final_command_hash
 
