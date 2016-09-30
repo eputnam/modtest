@@ -4,28 +4,32 @@ This is a gem that provides a simple CLI for running acceptance and unit tests f
 
 ## Installation
 
-Add this line to your application's Gemfile:
-
-```ruby
-gem 'modtest'
+Build the gem:
+```shell
+gem build modtest.gemspec
 ```
 
-And then execute:
-
-    $ bundle
-
-Or install it yourself as:
-
-    $ gem install modtest
+Install the gem:
+```shell
+gem install modtest-x.y.z.gem
+```
 
 ## Usage
+This command must be run in the root directory of the module in test.
 
+Provision a new server and run all acceptance tests for a module on PE 2016.2 on SLES 12. Do not destroy.
 
-## Development
+Old method:
+```shell
+PUPPET_INSTALL_TYPE=pe BEAKER_PE_DIR="http://enterprise.delivery.puppetlabs.net/2016.2/ci-ready" BEAKER_provision=yes BEAKER_destroy=no BEAKER_setfile=spec/acceptance/nodesets/sles-12-64mda bundle exec rspec spec/acceptance
+```
 
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
+With this gem:
+```shell
+modtest acceptance -p -e 2016.2 -n spec/acceptance/nodesets/sles-12-64mda 
+```
 
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+Use `modtest acceptance --help` for a full list of options
 
 ## Contributing
 
