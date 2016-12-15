@@ -59,12 +59,13 @@ class Modtest
 
         @final_command_hash = {
           "PUPPET_INSTALL_TYPE" => puppet_install_type,
-          "BEAKER_PE_DIR" => pe_dir,
-          "BEAKER_PE_VER" => pe_version_actual,
-          "BEAKER_destroy" => tf_to_yn(options.destroy),
-          "BEAKER_provision" => tf_to_yn(options.provision),
-          "BEAKER_setfile" => options.node,
-          "BEAKER_keyfile" => options.key
+          "BEAKER_PE_DIR"       => pe_dir,
+          "BEAKER_PE_VER"       => pe_version_actual,
+          "BEAKER_destroy"      => tf_to_yn(options.destroy),
+          "BEAKER_provision"    => tf_to_yn(options.provision),
+          "BEAKER_setfile"      => options.node,
+          "BEAKER_keyfile"      => options.key,
+          "BEAKER_debug"        => options.debug
         }
 
         @final_command_hash.each do |key,value|
