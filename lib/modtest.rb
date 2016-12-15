@@ -48,7 +48,7 @@ class Modtest
       c.syntax = 'modtest acceptance [options]'
       c.description = "Runs acceptance tests"
       c.option '-o', '--options', Object, 'list selected options and do nothing'
-      c.option '-e', '--type TYPE', String, 'install type'
+      c.option '-t', '--type TYPE', String, 'install type'
       c.option '-n', '--node NODESET', String, 'path to nodeset for the test(s)'
       c.option '-k', '--key KEYFILE', String, 'path to key file for acceptance tests'
       c.option '-i', '--install-version INSTALL_VERSION', Numeric, 'puppet version'
