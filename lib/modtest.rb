@@ -20,11 +20,23 @@ class Modtest
   end
 
   def print_options options_hash
-    puts "Selected Options: "
+    puts "Selected Options: ".color(:yellow)
     options_hash.each do |option,value|
+      if option == "BEAKER_setfile" && value.nil?
+        value = "default"
+      end
       print "#{option}=".color(:cyan)
       puts "#{value}"
     end
+  end
+
+  def print_command options_hash, rspec_command
+    puts "Executing Command: ".color(:yellow)
+    options_hash.each do |option,value|
+      print "#{option}=".color(:cyan)
+      print "#{value} "
+    end
+    puts rspec_command
   end
 
   def run
@@ -35,6 +47,7 @@ class Modtest
     command :acceptance do |c|
       c.syntax = 'modtest acceptance [options]'
       c.description = "Runs acceptance tests"
+      c.option '--options', Object, 'list selected options and do nothing'
       c.option '--node NODESET', String, 'path to nodeset for the test(s)'
       c.option '--key KEYFILE', String, 'path to key file for acceptance tests'
       c.option '--enterprise VERSION', Numeric, 'PE version'
@@ -53,8 +66,8 @@ class Modtest
         end
 
         options.default \
-        :key => "#{ENV['HOME']}/.ssh/id_rsa-acceptance",
-        :destroy => ENV['BEAKER_destroy'] || false,
+        :key       => "#{ENV['HOME']}/.ssh/id_rsa-acceptance",
+        :destroy   => ENV['BEAKER_destroy'] || false,
         :provision => ENV['BEAKER_provision'] || false
 
         @final_command_hash = {
@@ -66,7 +79,7 @@ class Modtest
           "BEAKER_setfile"      => options.node,
           "BEAKER_keyfile"      => options.key,
           "BEAKER_debug"        => options.debug
-        }
+        }.delete_if { |key, value| value.nil? }
 
         @final_command_hash.each do |key,value|
           unless value == nil
@@ -80,11 +93,15 @@ class Modtest
           raise "Acceptance test directory: #{Dir.pwd}/spec/acceptance not found, are you in the module's root dir?"
         end
 
-        @final_command_string += "bundle exec rspec #{Dir.pwd}/spec/acceptance/#{options.test}"
+        rspec_command = "bundle exec rspec #{Dir.pwd}/spec/acceptance/#{options.test}"
+        @final_command_string += rspec_command
 
         print_options @final_command_hash
+        print_command @final_command_hash, rspec_command
 
-        exec(@final_command_string)
+        unless options.options
+          exec(@final_command_string)
+        end
       end
     end
 
