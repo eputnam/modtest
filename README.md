@@ -32,27 +32,35 @@ modtest acceptance -p -e 2016.2 -n spec/acceptance/nodesets/sles-12-64mda
 ### Available Options
 #### `-o`, `--options` 
   *	"noop" mode, list selected options and print command without executing.
+  
 #### `-t`, `--type TYPE`
   * maps to `PUPPET_INSTALL_TYPE` 
   * agent | foss | pe
+  
 #### `-n`, `--node NODESET`
   * maps to `BEAKER_setfile`
   * path to nodeset file
+  
 #### `-k`, `--key KEYFILE`
   * maps to `BEAKER_keyfile`
   * path to acceptance key file
+  
 #### `-i`, `--install-version INSTALL_VERSION`
   * maps to `PUPPET_INSTALL_VERSION`
   * version of selected Puppet type to install
+  
 #### `-d`, `--destroy`
 - maps to `BEAKER_destroy`
 - defaults to `ENV['BEAKER_destroy'] || false`	
+
 #### `-p`, `--provision`
 - maps to `BEAKER_provision`
 - defaults to `ENV['BEAKER_provision'] || false`
+
 #### `-b`, `--debug`
 - maps to `BEAKER_debug`
 - toggle Beaker debug output
+
 #### `-f`, `--file TEST_FILE`
 - run only a specified spec file appended to `$(pwd)/spec/acceptance/`
 
