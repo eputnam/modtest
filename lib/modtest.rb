@@ -41,8 +41,8 @@ class Modtest
 
   def run
     program :name, 'modtest'
-    program :version, '0.10.0'
-    program :description, "It's a thing!"
+    program :version, '0.1.0'
+    program :description, "Tool for running module acceptance tests without having to type so darn much!"
 
     command :acceptance do |c|
       c.syntax = 'modtest acceptance [options]'
@@ -81,11 +81,7 @@ class Modtest
           else
             raise "PE requires a version number. \nExamples: 2016.4, 2016.2, 2015.3\n"
           end
-        elsif puppet_install_type == "foss"
-          if opts.install_version
-            puppet_install_version = opts.install_version
-          end
-        elsif puppet_install_type == "agent"
+        else
           if opts.install_version
             puppet_install_version = opts.install_version
           end
@@ -109,11 +105,7 @@ class Modtest
           end
         end
 
-        if Dir.exist?("#{Dir.pwd}/spec/acceptance")
-          acceptance_dir = "#{Dir.pwd}/spec/acceptance"
-        else
-          raise "Acceptance test directory: #{Dir.pwd}/spec/acceptance not found, are you in the module's root dir?"
-        end
+        raise "Acceptance test directory: #{Dir.pwd}/spec/acceptance not found, are you in the module's root dir?" if !Dir.exist?("#{Dir.pwd}/spec/acceptance")
 
         rspec_command = "bundle exec rspec #{Dir.pwd}/#{opts.file}"
         @final_command_string += rspec_command
@@ -121,9 +113,7 @@ class Modtest
         print_options @final_command_hash
         print_command @final_command_hash, rspec_command
 
-        unless opts.options
-          exec(@final_command_string)
-        end
+        exec(@final_command_string) unless opts.options
       end
     end
 
