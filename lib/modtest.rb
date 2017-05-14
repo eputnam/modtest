@@ -62,7 +62,8 @@ class Modtest
         :key       => "#{ENV['HOME']}/.ssh/id_rsa-acceptance",
         :destroy   => ENV['BEAKER_destroy'] || false,
         :provision => ENV['BEAKER_provision'] || false,
-        :type      => "foss"
+        :type      => "foss",
+        :file      => "spec/acceptance/"
 
         case opts.type.downcase
         when "pe"
@@ -114,7 +115,7 @@ class Modtest
           raise "Acceptance test directory: #{Dir.pwd}/spec/acceptance not found, are you in the module's root dir?"
         end
 
-        rspec_command = "bundle exec rspec #{Dir.pwd}/spec/acceptance/#{opts.test}"
+        rspec_command = "bundle exec rspec #{Dir.pwd}/#{opts.file}"
         @final_command_string += rspec_command
 
         print_options @final_command_hash
